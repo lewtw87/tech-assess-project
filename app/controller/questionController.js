@@ -7,10 +7,12 @@ exports.create_question = function (req, res) {
     var new_question = new Question(req.body);
 
     //handles null error 
-    if (!new_question.question) {
-        res.status(400).send({ error: true, message: 'Please provide question text' });
+    if (!new_question.question || !new_question.tags) {
+        res.status(400).send({ error: true, message: 'Please provide question text or tags' });
     }
     else {
+        //Check if all tags are available
+        
 
         Question.createQuestion(new_question, function (err, question) {
 
