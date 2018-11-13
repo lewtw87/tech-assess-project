@@ -31,7 +31,7 @@ CREATE TABLE `questions_tags` (
   KEY `fk_tag_id_idx` (`tag_id`),
   CONSTRAINT `fk_question_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +40,7 @@ CREATE TABLE `questions_tags` (
 
 LOCK TABLES `questions_tags` WRITE;
 /*!40000 ALTER TABLE `questions_tags` DISABLE KEYS */;
+INSERT INTO `questions_tags` VALUES (1,1,1),(2,1,2),(3,1,3),(4,2,6),(5,3,6),(6,2,3);
 /*!40000 ALTER TABLE `questions_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-13 13:45:46
+-- Dump completed on 2018-11-13 16:17:37

@@ -32,6 +32,19 @@ Question.getQuestionById = function getQuestion(questionId, result) {
         }
     });
 };
+Question.getQuestionByTag = function getQuestion(tag, result) {
+    sql.query(
+        "SELECT DISTINCT q.id, q.question FROM questions q LEFT JOIN questions_tags qt ON q.id = qt.question_id LEFT JOIN tags t ON qt.tag_id = t.id WHERE t.tag IN (?)"
+    , [tag], function (err, res) {
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
+        }
+        else {
+            result(null, res);
+        }
+    });
+};
 Question.getAllQuestions = function getAllQuestions(result) {
     sql.query("Select * from questions", function (err, res) {
 
