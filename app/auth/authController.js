@@ -42,15 +42,12 @@ router.get('/logout', function (req, res) {
 });
 
 router.post('/register', function (req, res) {
-    console.log('running ' + req.body.email);
     var hashedPassword = bcrypt.hashSync(req.body.password, 8);
-
-    console.log(hashedPassword);
-    console.log(req.body);
+    req.body.password = hashedPassword;
     var new_user = new User(req.body);
 
     User.createUser(new_user, function (err, user) {
-        if (err) return res.status(500).send("There was a problem registering the user`.");
+        if (err) return res.status(500).send("There was a problem registering the user.");
 
         // if user is registered without errors
         // create a token
@@ -64,8 +61,7 @@ router.post('/register', function (req, res) {
 });
 
 router.get('/me', VerifyToken, function (req, res, next) {
-
-    User.findById(req.userId, { password: 0 }, function (err, user) {
+    User.findById(req.query.userId, function (err, user) {
         if (err) return res.status(500).send("There was a problem finding the user.");
         if (!user) return res.status(404).send("No user found.");
         res.status(200).send(user);

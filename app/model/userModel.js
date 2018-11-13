@@ -22,7 +22,7 @@ User.findByEmail = function findByEmail(email, result) {
 };
 
 User.findById = function findById(userId, result) {
-  sql.query("SELECT id, email, password FROM users WHERE id = ? ", userId, function (err, res) {
+  sql.query("SELECT id, email FROM users WHERE id = ? ", userId, function (err, res) {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -46,3 +46,5 @@ User.createUser = function createUser(user, result) {
       }
   });
 };
+
+module.exports = User;
