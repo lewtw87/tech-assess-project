@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 
-var VerifyToken = require('./verifyToken');
+var VerifyToken = require('./verifyToken.js');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -13,7 +13,7 @@ var User = require('../model/userModel.js');
  */
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var bcrypt = require('bcryptjs');
-var config = require('../config'); // get config file
+var config = require('../../config.js'); // get config file
 
 router.post('/login', function (req, res) {
 
@@ -42,25 +42,24 @@ router.get('/logout', function (req, res) {
 });
 
 router.post('/register', function (req, res) {
-
+    console.log('running ' + req.body.email);
     var hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
-    User.create({
-        name: req.body.name,
-        email: req.body.email,
-        password: hashedPassword
-    },
-        function (err, user) {
-            if (err) return res.status(500).send("There was a problem registering the user`.");
+    console.log(hashedPassword);
+    console.log(req.body);
+    var new_user = new User(req.body);
 
-            // if user is registered without errors
-            // create a token
-            var token = jwt.sign({ id: user._id }, config.secret, {
-                expiresIn: 86400 // expires in 24 hours
-            });
+    User.createUser(new_user, function (err, user) {
+        if (err) return res.status(500).send("There was a problem registering the user`.");
 
-            res.status(200).send({ auth: true, token: token });
+        // if user is registered without errors
+        // create a token
+        var token = jwt.sign({ id: user._id }, config.secret, {
+            expiresIn: 86400 // expires in 24 hours
         });
+
+        res.status(200).send({ auth: true, token: token });
+    });
 
 });
 

@@ -5,10 +5,11 @@ var sql = require('./db.js');
 //Task object constructor
 var Question = function (question) {
     this.question = question.question;
+    this.tags = question.tags;
 };
 
 Question.createQuestion = function createQuestion(newQuestion, result) {
-    sql.query("INSERT INTO questions set ?", newQuestion, function (err, res) {
+    sql.query("INSERT INTO questions SET ?", newQuestion, function (err, res) {
 
         if (err) {
             console.log("error: ", err);
@@ -21,7 +22,7 @@ Question.createQuestion = function createQuestion(newQuestion, result) {
     });
 };
 Question.getQuestionById = function getQuestion(questionId, result) {
-    sql.query("Select id, question from questions where id = ? ", questionId, function (err, res) {
+    sql.query("SELECT id, question FROM questions WHERE id = ? ", questionId, function (err, res) {
         if (err) {
             console.log("error: ", err);
             result(err, null);
@@ -46,7 +47,7 @@ Question.getQuestionByTag = function getQuestion(tag, result) {
     });
 };
 Question.getAllQuestions = function getAllQuestions(result) {
-    sql.query("Select * from questions", function (err, res) {
+    sql.query("SELECT * FROM questions", function (err, res) {
 
         if (err) {
             console.log("error: ", err);

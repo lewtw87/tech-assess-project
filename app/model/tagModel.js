@@ -8,7 +8,7 @@ var Tag = function (tag) {
 };
 
 Tag.createTag = function createTag(newTag, result) {
-    sql.query("INSERT INTO tags set ?", newTag, function (err, res) {
+    sql.query("INSERT INTO tags SET ?", newTag, function (err, res) {
 
         if (err) {
             console.log("error: ", err);
@@ -21,7 +21,7 @@ Tag.createTag = function createTag(newTag, result) {
     });
 };
 Tag.getTagById = function getTag(tagId, result) {
-    sql.query("Select id, question from tags where id = ? ", tagId, function (err, res) {
+    sql.query("SELECT id, question FROM tags WHERE id = ? ", tagId, function (err, res) {
         if (err) {
             console.log("error: ", err);
             result(err, null);
@@ -33,7 +33,7 @@ Tag.getTagById = function getTag(tagId, result) {
     });
 };
 Tag.getAllTags = function getAllTags(result) {
-    sql.query("Select * from tags", function (err, res) {
+    sql.query("SELECT * FROM tags", function (err, res) {
 
         if (err) {
             console.log("error: ", err);
