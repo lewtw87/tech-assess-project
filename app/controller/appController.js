@@ -26,36 +26,36 @@ exports.create_question = function (req, res) {
     }
     else {
 
-        Task.createQuestion(new_question, function (err, task) {
+        Question.createQuestion(new_question, function (err, question) {
 
             if (err)
                 res.send(err);
-            res.json(task);
+            res.json(question);
         });
     }
 };
 
 
 exports.get_question = function (req, res) {
-    Task.getQuestionById(req.params.questionId, function (err, task) {
+    Question.getQuestionById(req.params.questionId, function (err, question) {
         if (err)
             res.send(err);
-        res.json(task);
+        res.json(question);
     });
 };
 
 
 exports.update_question = function (req, res) {
-    Task.updateById(req.params.questionId, new Question(req.body), function (err, task) {
+    Question.updateById(req.params.questionId, new Question(req.body), function (err, question) {
         if (err)
             res.send(err);
-        res.json(task);
+        res.json(question);
     });
 };
 
 
 exports.delete_question = function (req, res) {
-    Task.remove(req.params.questionId, function (err, task) {
+    Question.remove(req.params.questionId, function (err, question) {
         if (err)
             res.send(err);
         res.json({ message: 'Question successfully deleted' });
