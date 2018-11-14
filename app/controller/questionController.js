@@ -1,4 +1,4 @@
-const { Users, Questions, Tags } = require('../model/db.js');
+const { Users, Questions, Tags } = require('../db.js');
 
 //Gov Tech Endpoint 1
 exports.create_question = function (req, res) {
@@ -9,8 +9,7 @@ exports.create_question = function (req, res) {
 
     Questions.create(req.body)
     .then(questions => Promise.all(tags).then(storedTags => questions.addTags(storedTags)).then(() => questions))
-    //.then(questions => Questions.findOne({ where: {id: question.id}, include: [Users, Tags]}))
-    .then(questionTag => res.json(questionTag))
+    .then(questionTag => res.status(201).json(questionTag)) //return 201 for POST succeed status
     .catch(err => res.status(400).json({ error: true, message: err}));
     
 };

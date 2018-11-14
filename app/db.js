@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-const QuestionModel = require('./questionModel.js');
-const TagModel = require('./tagModel.js');
-const UserModel = require('./userModel.js');
+const QuestionModel = require('./model/questionModel.js');
+const TagModel = require('./model/tagModel.js');
+const UserModel = require('./model/userModel.js');
 
 const sequelize = new Sequelize('techassess_elearning', 'root', '', {
     host: 'localhost',

@@ -1,4 +1,4 @@
-const {Users} = require('../model/db.js');
+const {Users} = require('../db.js');
 var VerifyToken = require('./verifyToken.js');
 
 /**
