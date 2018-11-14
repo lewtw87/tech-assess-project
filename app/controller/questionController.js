@@ -1,42 +1,36 @@
-'use strict';
-
-var Question = require('../model/questionModel.js');
+const { Users, Questions, Tags } = require('../model/db.js');
 
 //Gov Tech Endpoint 1
 exports.create_question = function (req, res) {
-    var new_question = new Question(req.body);
 
-    //handles null error 
-    if (!new_question.question || !new_question.tags) {
-        res.status(400).send({ error: true, message: 'Please provide question text or tags' });
-    }
-    else {
-        //Check if all tags are available
-        
+    //Check if all tags are available
+    let tagsArray = JSON.parse(req.body.tags);
+    const tags = tagsArray.map(tagItem => Tags.findOrCreate({ where: { tag: tagItem }, defaults: { tag: tagItem }}).spread((tag, created) => tag));
 
-        Question.createQuestion(new_question, function (err, question) {
-
-            if (err)
-                res.send(err);
-            res.json(question);
-        });
-    }
+    Questions.create(req.body)
+    .then(questions => Promise.all(tags).then(storedTags => questions.addTags(storedTags)).then(() => questions))
+    //.then(questions => Questions.findOne({ where: {id: question.id}, include: [Users, Tags]}))
+    .then(questionTag => res.json(questionTag))
+    .catch(err => res.status(400).json({ error: true, message: err}));
+    
 };
 
 
 //Gov Tech Endpoint 2
 exports.get_question_by_tag = function (req, res) {
-    Question.getQuestionByTag(req.query.tag, function (err, tag) {
-        if (err)
-            res.send(err);
 
-        var jsonResult = {
-            questions: tag
-        }    
-        res.json(jsonResult);
-    });
+    Questions.findAll({
+        include: [
+            { model: Tags, where: { tag: req.query.tag } }
+        ]
+    })
+    .then(questions => res.json(questions))
+    .catch(err => res.status(400).json({ err: err}));
+    
+    
 };
 
+/*
 exports.list_questions = function (req, res) {
     Question.getAllQuestions(function (err, question) {
         if (err)
@@ -71,4 +65,4 @@ exports.delete_question = function (req, res) {
             res.send(err);
         res.json({ message: 'Question successfully deleted' });
     });
-};
+};*/

@@ -1,17 +1,35 @@
-'use strict';
+const Sequelize = require('sequelize');
+const QuestionModel = require('./questionModel.js');
+const TagModel = require('./tagModel.js');
+const UserModel = require('./userModel.js');
 
-var mysql = require('mysql');
-
-//local mysql db connection
-var connection = mysql.createConnection({
+const sequelize = new Sequelize('techassess_elearning', 'root', '', {
     host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'techassess_elearning'
+    dialect: 'mysql',
+    pool: {
+        max: 10,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+    }
 });
 
-connection.connect(function (err) {
-    if (err) throw err;
-});
+const Users = UserModel(sequelize, Sequelize);
+// QuestionTag = Association tables (many to many relationship)
+const QuestionTag = sequelize.define('questions_tags', {});
+const Questions = QuestionModel(sequelize, Sequelize);
+const Tags = TagModel(sequelize, Sequelize);
 
-module.exports = connection;
+Questions.belongsToMany(Tags, { through: QuestionTag, unique: false });
+Tags.belongsToMany(Questions, { through: QuestionTag, unique: false });
+
+sequelize.sync({ force: false }) //Change to true to drop and recreate table
+  .then(() => {
+    console.log(`DB & Tables created`)
+  });
+
+module.exports = {
+  Users,
+  Questions,
+  Tags
+};

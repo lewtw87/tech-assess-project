@@ -1,5 +1,4 @@
-'use strict';
-
+/*
 var Tag = require('../model/tagModel.js');
 
 exports.list_tags = function (req, res) {
@@ -60,4 +59,4 @@ exports.delete_tag = function (req, res) {
             res.send(err);
         res.json({ message: 'Tag successfully deleted' });
     });
-};
+};*/

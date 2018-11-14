@@ -2,10 +2,15 @@
 
 module.exports = function (app) {
 
-    var questionController = require('../controller/questionController.js');
-    var userController = require('../controller/userController.js');
-    var authController = require('../auth/authController.js');
-    var VerifyToken = require('../auth/verifyToken.js');
+    const questionController = require('../controller/questionController.js');
+    //const userController = require('../controller/userController.js');
+    const authController = require('../controller/authController.js');
+    const verifyToken = require('../controller/verifyToken.js');
+
+    const validate = require('express-validation');
+    const validation = require('../validation/joiValidation.js');
+
+  
 
     // Welcome
     app.get('/', function (req, res) {
@@ -21,16 +26,24 @@ module.exports = function (app) {
     });
 
     // For authentication purpose
-    app.use('/api/users', userController);
-    app.use('/api/auth', authController);
+    app.post('/api/auth/login', function(req, res) {
+        authController.login(req, res);
+    });
+    app.post('/api/auth/logout', function(req, res) {
+        authController.logout(req, res);
+    });
+    app.post('/api/auth/register', function(req, res) {
+        authController.register(req, res);
+    });
+
 
     // Gov Tech Endpoint 1
-    app.post('/api/questions', VerifyToken, function(req, res) {
+    app.post('/api/questions', verifyToken, validate(validation.create_question), function(req, res) {
         questionController.create_question(req, res);
     });
 
     // Gov Tech Endpoint 2
-    app.get('/api/questions', VerifyToken, function(req, res) {
+    app.get('/api/questions', verifyToken, validate(validation.get_question_by_tag), function(req, res) {
         // If user query with ?tag=xxx then query it with tag, else throw error
         if(req.query.tag != undefined)
         {
