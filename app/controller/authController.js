@@ -1,4 +1,4 @@
-const {Users} = require('../db.js');
+const db = require('../../db.js');
 var VerifyToken = require('./verifyToken.js');
 
 /**
@@ -10,7 +10,7 @@ var config = require('../../config.js'); // get config file
 
 exports.login = function (req, res) {
 
-    Users.findOne({ where: { email: req.body.email } }).then(user => {
+    db.Users.findOne({ where: { email: req.body.email } }).then(user => {
         //if (err) return res.status(500).send('Error on the server.');
         if (!user) return res.status(404).send('No user found.');
         
@@ -35,7 +35,7 @@ exports.register = function (req, res) {
 
     var hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
-    Users.create({
+    db.Users.create({
         name : req.body.name,
         email : req.body.email,
         password : hashedPassword

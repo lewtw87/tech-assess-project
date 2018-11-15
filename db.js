@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize');
-const QuestionModel = require('./model/questionModel.js');
-const TagModel = require('./model/tagModel.js');
-const UserModel = require('./model/userModel.js');
+const QuestionModel = require('./app/model/questionModel.js');
+const TagModel = require('./app/model/tagModel.js');
+const UserModel = require('./app/model/userModel.js');
+const Op = Sequelize.Op;
 
 const sequelize = new Sequelize('techassess_elearning', 'root', '', {
     host: 'localhost',
@@ -11,8 +12,11 @@ const sequelize = new Sequelize('techassess_elearning', 'root', '', {
         min: 0,
         acquire: 30000,
         idle: 10000
-    }
+    },
+    operatorsAliases: { $and: Op.and, $in: Op.in }
 });
+
+
 
 const Users = UserModel(sequelize, Sequelize);
 // QuestionTag = Association tables (many to many relationship)

@@ -8,7 +8,7 @@ const create_question = {
 };
 
 const get_question_by_tag = {
-    params: {
+    querys: {
       tag: Joi.string().required()
     }
   
