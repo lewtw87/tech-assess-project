@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "SET NODE_ENV=dev && node server.js",
+    "test": "mocha --timeout 10000"
   },
   "keywords": [],
   "author": "Alvin Lew",
@@ -16,10 +17,14 @@
     "express-validation": "^1.0.2",
     "joi": "^14.0.6",
     "jsonwebtoken": "^8.3.0",
+    "morgan": "^1.9.1",
     "mysql2": "^1.6.4",
     "sequelize": "^4.41.2"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0",
     "nodemon": "^1.18.6"
   }
 }

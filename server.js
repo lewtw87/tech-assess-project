@@ -1,7 +1,8 @@
 const express = require('express'),
   app = express(),
   bodyParser = require('body-parser');
-  port = process.env.PORT || 3030;
+  port = process.env.PORT || 3030,
+  morgan = require('morgan');  
 
 /*
 const mysql = require('mysql');
@@ -22,6 +23,9 @@ console.log('RESTful API server started on: ' + port);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(morgan('combined'));
 
 var routes = require('./app/routes/appRoutes.js'); //importing route
 routes(app); //register the route
+
+module.exports = app;

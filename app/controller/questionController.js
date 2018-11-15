@@ -23,7 +23,7 @@ exports.get_question_by_tag = function (req, res) {
         include: [
             { 
                 model: db.Tags, 
-                where: { tag: {$in: req.query.tag} },
+                where: { tag: req.query.tag },
                 attributes: []
             }
         ]

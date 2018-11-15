@@ -8,8 +8,10 @@ const create_question = {
 };
 
 const get_question_by_tag = {
-    querys: {
-      tag: Joi.string().required()
+    query: {
+      //tag: Joi.string().required()
+      tag: Joi.alternatives().try(Joi.string().required(), Joi.array().required()).required() 
+      ///tag: Joi.array().items(Joi.string()).single()
     }
   
 };

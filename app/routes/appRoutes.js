@@ -45,14 +45,8 @@ module.exports = function (app) {
     // Gov Tech Endpoint 2
     app.get('/api/questions', verifyToken, validate(validation.get_question_by_tag), function(req, res) {
         // If user query with ?tag=xxx then query it with tag, else throw error
-        if(req.query.tag != undefined)
-        {
-            questionController.get_question_by_tag(req, res);
-        }
-        else
-        {
-            //questionController.list_questions(req, res);
-        }
+        questionController.get_question_by_tag(req, res);
+        
     });
 
     
