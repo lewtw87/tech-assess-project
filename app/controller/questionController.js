@@ -4,8 +4,8 @@ const db = require('../../db.js');
 exports.create_question = function (req, res) {
 
     //Check if all tags are available
-    let tagsArray = JSON.parse(req.body.tags);
-    const tags = tagsArray.map(tagItem => db.Tags.findOrCreate({ where: { tag: tagItem }, defaults: { tag: tagItem }}).spread((tag, created) => tag));
+    //let tagsArray = JSON.parse(req.body.tags);
+    const tags = req.body.tags.map(tagItem => db.Tags.findOrCreate({ where: { tag: tagItem }, defaults: { tag: tagItem }}).spread((tag, created) => tag));
 
     db.Questions.create(req.body)
     .then(questions => Promise.all(tags).then(storedTags => questions.addTags(storedTags)).then(() => questions))
@@ -18,7 +18,7 @@ exports.create_question = function (req, res) {
 //Gov Tech Endpoint 2
 exports.get_question_by_tag = function (req, res) {
 
-    db.Questions.findAll({
+    /*db.Questions.findAll({
         attributes: ['id', 'question'],
         include: [
             { 
@@ -26,13 +26,41 @@ exports.get_question_by_tag = function (req, res) {
                 where: { tag: req.query.tag },
                 attributes: []
             }
-        ]
-        
+        ],
+        group: ['question.id'],
+        having: [db.Sequelize.literal('COUNT(DISTINCT ?) >= ?'), '`tag.tag`', req.query.tag.length]
     })
     .then(questions => res.json(questions))
-    .catch(err => res.status(400).json({ err: err}));
+    .catch(function(err) {
+        console.log(err);
+        res.status(400).json({ err: "There is a problem querying the database."});
+    });*/
     
     //TODO, currently this query retrieve all records that matching any of the tags, need to filter to records matching ALL the tags
+
+    let tagArrayString = "";
+    let tagCount = 0;
+    if(Array.isArray(req.query.tag)) 
+    {
+        tagArrayString = "'" + req.query.tag.join("','") + "'";
+        tagCount = req.query.tag.length;
+    }
+    else
+    {
+        tagArrayString = "'" + req.query.tag + "'";
+        tagCount = 1;
+    }
+    db.sequelize.query(`SELECT DISTINCT q.id, q.question 
+        FROM questions q 
+        INNER JOIN questions_tags qt ON q.id = qt.questionid 
+        INNER JOIN tags t ON qt.tagid = t.id WHERE t.tag IN (` + tagArrayString + `)
+        GROUP BY q.id
+        HAVING COUNT(DISTINCT t.tag) >= ` + tagCount + `
+    `, { type: db.sequelize.QueryTypes.SELECT}).then(x => {
+        console.log(x);
+        res.json(x);
+    });
+
 };
 
 /*

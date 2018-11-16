@@ -33,6 +33,7 @@ sequelize.sync({ force: false }) //Change to true to drop and recreate table
   });
 
 module.exports = {
+  sequelize,
   Users,
   Questions,
   Tags
