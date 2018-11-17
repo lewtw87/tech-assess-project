@@ -75,11 +75,65 @@ exports.create_quiz = function (req, res) {
         } 
         else
         {
-            res.status(201).json(n)
+            let sumOfWeights = req.body.questions.reduce(function(memo, question) {
+                return memo + question.weight;
+              }, 0);
+            let selectedWeigths = {};
+            let selectedId = [];
+            const probabilityOfDistribution = sumOfWeights * 20; //Alvin: Higher for more accuracy and less variation
+
+            for (var key in req.body.questions) {
+                const question = req.body.questions[key];
+                selectedWeigths[question.id] = 0;
+            }
+
+            for (var i = 0; i < probabilityOfDistribution; i++) {
+                let random = Math.random() * (sumOfWeights + 1);
+                for (var key in req.body.questions) {
+                    const question = req.body.questions[key];
+                    //console.log(question);
+                    random -= question.weight;
+                    if(random <= 0)
+                    {
+                        selectedWeigths[question.id] = (selectedWeigths[question.id] || 0) + 1;
+                        break;
+                    }
+                }
+            }  
+
+            var sortedWeights = Object.keys(selectedWeigths).map(function(key) {
+                return [key, selectedWeigths[key]];
+            });
+            
+            
+            // Sort the array based on the second element
+            sortedWeights.sort(function(first, second) {
+                return second[1] - first[1];
+            });
+
+            console.log(sortedWeights); // ALV: first is id, 2nd is distributed probability (% of occurence)
+
+            for (var i = 0; i < req.body.length; i++) { // now lets iterate in sort order
+                var key = parseInt(sortedWeights[i][0]);
+                selectedId.push(key);
+            } 
+
+            /*db.Questions.findAll(
+                { 
+                    limit: req.body.length, 
+                    where: {
+                        id: selectedId
+                    },
+                    attributes: ['id', 'question']
+                }
+            ).then(questions => res.json(questions));*/
+            res.json({ questions: selectedId });
         }
     });
 
 };
+
+
 
 /*
 exports.list_questions = function (req, res) {

@@ -22,7 +22,7 @@ const create_quiz = {
     body: {
       questions: Joi.array().items(Joi.object().keys({
         id: Joi.number().integer().required(),
-        weight: Joi.number().required()
+        weight: Joi.number().required().positive().allow(0)
       }).required()).required(),
       length: Joi.number().integer().required()
     }
