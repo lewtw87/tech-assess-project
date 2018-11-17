@@ -49,7 +49,11 @@ module.exports = function (app) {
         
     });
 
-    
+    // Gov Tech Endpoint 3
+    app.post('/api/quiz', verifyToken, validate(validation.create_quiz), function(req, res) {
+        questionController.create_quiz(req, res);
+        
+    });
 
     
 };

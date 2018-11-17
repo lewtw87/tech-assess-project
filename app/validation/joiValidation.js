@@ -9,14 +9,27 @@ const create_question = {
 
 const get_question_by_tag = {
     query: {
-      //tag: Joi.string().required()
-      tag: Joi.alternatives().try(Joi.string().required(), Joi.array().required()).required() 
-      ///tag: Joi.array().items(Joi.string()).single()
+      tag: Joi.alternatives().try(Joi.string().required(), Joi.array().required()).required().error(errors => {
+        return {
+          message: "Please specify one or more tag."
+        };
+      }), 
     }
   
 };
 
+const create_quiz = {
+    body: {
+      questions: Joi.array().items(Joi.object().keys({
+        id: Joi.number().integer().required(),
+        weight: Joi.number().required()
+      }).required()).required(),
+      length: Joi.number().integer().required()
+    }
+};
+
 module.exports = {
     create_question,
-    get_question_by_tag
+    get_question_by_tag,
+    create_quiz
 };

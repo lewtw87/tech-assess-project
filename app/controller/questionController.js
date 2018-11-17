@@ -33,7 +33,7 @@ exports.get_question_by_tag = function (req, res) {
     .then(questions => res.json(questions))
     .catch(function(err) {
         console.log(err);
-        res.status(400).json({ err: "There is a problem querying the database."});
+        res.status(400).json({ error: true, message: "There is a problem querying the database."});
     });*/
     
     //TODO, currently this query retrieve all records that matching any of the tags, need to filter to records matching ALL the tags
@@ -57,8 +57,26 @@ exports.get_question_by_tag = function (req, res) {
         GROUP BY q.id
         HAVING COUNT(DISTINCT t.tag) >= ` + tagCount + `
     `, { type: db.sequelize.QueryTypes.SELECT}).then(x => {
-        console.log(x);
         res.json(x);
+    }).catch(function(err) {
+        console.log(err);
+        res.status(400).json({ error: true, message: "There is a problem querying the database."});
+    });
+
+};
+
+//Gov Tech Endpoint 3
+exports.create_quiz = function (req, res) {
+    //Check if length must be less than number of quiz in the DB
+    db.Questions.count().then(n => {
+        if(req.body.length > n)   
+        {
+            res.status(400).json({ error: true, message: "Request length exceed the number of questions in the database."});
+        } 
+        else
+        {
+            res.status(201).json(n)
+        }
     });
 
 };
