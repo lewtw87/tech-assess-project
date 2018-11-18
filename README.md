@@ -30,7 +30,7 @@ npm test
 
 ## Usage
 There are 5 endpoints in this application (3 from assessment specification, and 2 is added by me for security purpose):
-####1. Alvin Added Endpoint 1: Create a user
+#### 1. Alvin Added Endpoint 1: Create a user
 - End point: POST /api/auth/register
 - Request body: Specifies email and password of the user
 - Example (Request Body): 
@@ -48,7 +48,7 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 }
 ```
 
-####2. Alvin Added Endpoint 2: Login with existing user
+#### 2. Alvin Added Endpoint 2: Login with existing user
 - End point: POST /api/auth/login
 - Request body: Specifies email and password of the user
 - Example (Request Body): 
@@ -66,7 +66,7 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 }
 ```
 
-####3. Assessment Endpoint 1: Add a question
+#### 3. Assessment Endpoint 1: Add a question
 <br />**You must set header's "x-access-token" value with the token obtained via previous end point.**
 - End point: POST /api/questions
 - Request body: Specifies question text and tags of question to be added
@@ -90,7 +90,7 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 }
 ```
 
-####4. Assessment Endpoint 2: Find questions by tags
+#### 4. Assessment Endpoint 2: Find questions by tags
 <br />**You must set header's "x-access-token" value with the token obtained via previous end point.**
 - End point: GET /api/questions
 - Request body: Specifies question text and tags of question to be added
@@ -120,7 +120,7 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 }
 ```
 
-####5. Assessment Endpoint 3: Make a random quiz
+#### 5. Assessment Endpoint 3: Make a random quiz
 <br />**You must set header's "x-access-token" value with the token obtained via previous end point.**
 - End point: POST /api/quiz
 - Request body: Specifies list of question IDs in the pool, and their corresponding weights
