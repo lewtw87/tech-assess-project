@@ -18,6 +18,7 @@ const sequelize = new Sequelize('techassess_elearning', 'root', '', {
     operatorsAliases: { $and: Op.and, $in: Op.in }
 });
 ```
+5. For "Endpoint 3: Make a random quiz", I am currently using a For loop to loop through sum of weighting * 20 times, this can be change by a constant called probabilityOfDistribution set inside questionController.js line 83. The higher the number of this constant, the result will be more accurate (variation of result will be lesser). 
 
 ## Common setup
 Clone the repo and install the dependencies via npm install.
