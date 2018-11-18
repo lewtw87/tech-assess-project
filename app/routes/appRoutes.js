@@ -22,7 +22,10 @@ module.exports = function (app) {
 
     // Set default API response
     app.get('/api', function (req, res) {
-        res.status(200).send('API works.');
+        res.status(200).json({
+            status: 'API for tech assessment',
+            message: 'Welcome!',
+        });
     });
 
     app.use((err, req, res, next) => {
