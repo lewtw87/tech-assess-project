@@ -67,7 +67,7 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 ```
 
 3. Assessment Endpoint 1: Add a question
-**You must set header's "x-access-token" value with the token obtained via previous end point.**
+<br />**You must set header's "x-access-token" value with the token obtained via previous end point.**
 - End point: POST /api/questions
 - Request body: Specifies question text and tags of question to be added
 - Header:
@@ -91,7 +91,7 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 ```
 
 4. Assessment Endpoint 2: Find questions by tags
-**You must set header's "x-access-token" value with the token obtained via previous end point.**
+<br />**You must set header's "x-access-token" value with the token obtained via previous end point.**
 - End point: GET /api/questions
 - Request body: Specifies question text and tags of question to be added
 - Header:
@@ -121,7 +121,7 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 ```
 
 5. Assessment Endpoint 3: Make a random quiz
-**You must set header's "x-access-token" value with the token obtained via previous end point.**
+<br />**You must set header's "x-access-token" value with the token obtained via previous end point.**
 - End point: POST /api/quiz
 - Request body: Specifies list of question IDs in the pool, and their corresponding weights
 - Header:
