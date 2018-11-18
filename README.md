@@ -48,6 +48,8 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 }
 ```
 
+
+
 #### 2. Alvin Added Endpoint 2: Login with existing user
 - End point: POST /api/auth/login
 - Request body: Specifies email and password of the user
@@ -65,6 +67,8 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNTQyNTIyOTg4LCJleHAiOjE1NDI2MDkzODh9.JSMD6GFe7fGcQXoTkAivBpYmTZrHuJo-96G6ROPykNs"
 }
 ```
+
+
 
 #### 3. Assessment Endpoint 1: Add a question
 <br />**You must set header's "x-access-token" value with the token obtained via previous end point.**
@@ -89,6 +93,8 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 	"id": 167
 }
 ```
+
+
 
 #### 4. Assessment Endpoint 2: Find questions by tags
 <br />**You must set header's "x-access-token" value with the token obtained via previous end point.**
@@ -119,6 +125,8 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 	]
 }
 ```
+
+
 
 #### 5. Assessment Endpoint 3: Make a random quiz
 <br />**You must set header's "x-access-token" value with the token obtained via previous end point.**
