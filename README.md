@@ -1,8 +1,26 @@
 # Technical Assessment project - Alvin Lew
 
+## Explanation
+1. I have added security token check for all 3 end point in the assessment. Before calling the 3 API, please register a user account using POST http://localhost:3030/api/auth/register by passing in request body of {email: *youemail@email.com*, *password: yourpassword*}. The response body will contains a token which will expire in 24 hours. When query the 3 API in the assessment, please set header by adding this token to "x-access-token". Please contact me if you have any question/issue using the API. The reason for adding the security check is because I think it is essential to control who can access data from the database, if this is not required, please contact me to remove the security check.
+2. This API is built using Node.js with ExpressJs framework. ORM is done using sequelize. 
+3. Unit test is done using Mocha and Chai (unit test located in test/mochaTest.js).
+4. Please create a database in MySQL and configure it before starting the server (Create DB script is inside mysql_createdbscript folder). MySQL configuration is in db.js line 7. "techassess_elearning" below is database name, "root" is username, 3rd param is the password which is empy.
+```
+const sequelize = new Sequelize('techassess_elearning', 'root', '', {
+    host: 'localhost',
+    dialect: 'mysql',
+    pool: {
+        max: 10,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+    },
+    operatorsAliases: { $and: Op.and, $in: Op.in }
+});
+```
 
 ## Common setup
-Clone the repo and install the dependencies.
+Clone the repo and install the dependencies via npm install.
 
 ```bash
 git clone https://github.com/lewtw87/tech-assess-project
@@ -12,7 +30,7 @@ git clone https://github.com/lewtw87/tech-assess-project
 npm install
 ```
 
-**Please configure you MySQL connection inside db.js before running the server.**
+**Please configure you MySQL connection inside db.js before starting the server.**
 
 To start the node.js server, run the following
 ```bash
@@ -29,7 +47,7 @@ npm test
 
 
 ## Usage
-There are 5 endpoints in this application (3 from assessment specification, and 2 is added by me for security purpose):
+There are 5 endpoints in this application (3 from assessment specification, and 2 added by me for security purpose):
 #### 1. Alvin Added Endpoint 1: Create a user
 - End point: POST /api/auth/register
 - Request body: Specifies email and password of the user
@@ -158,21 +176,3 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 ```
 
 
-## Explanation
-1. I have added security token check for all 3 end point in the assessment. Before calling the 3 API, please register a user account using POST http://localhost:3030/api/auth/register by passing in request body of {email: *youemail@email.com*, *password: yourpassword*}. The response body will contains a token which will expire in 24 hours. When query the 3 API in the assessment, please set header by adding this token to "x-access-token". Please contact me if you have any question/issue using the API.
-2. This API is built using Node.js with ExpressJs framework. ORM is done using sequelize.
-3. Unit test is done using Mocha and Chai (unit test located in test/mochaTest.js).
-4. MySQL configuration is in db.js. "techassess_elearning" below is database name, "root" is username, 3rd param is the password which is empy.
-```
-const sequelize = new Sequelize('techassess_elearning', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql',
-    pool: {
-        max: 10,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-    },
-    operatorsAliases: { $and: Op.and, $in: Op.in }
-});
-```
