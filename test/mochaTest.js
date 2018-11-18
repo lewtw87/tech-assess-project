@@ -25,7 +25,7 @@ describe('Users', function() {
     });
 
     describe('/api/auth/register', function () {
-        it('should register user', function (done) {
+        it('should register user.', function (done) {
             chai.request(app)
                 .post('/api/auth/register')
                 .send(regDetails)
@@ -39,8 +39,20 @@ describe('Users', function() {
         });
     });
 
+    describe('/api/auth/register', function () {
+        it('should not register user with repeated email.', function (done) {
+            chai.request(app)
+                .post('/api/auth/register')
+                .send(regDetails)
+                .end((err, res) => {
+                    res.should.have.status(400); 
+                    done();
+                });
+        });
+    });
+
     describe('/api/auth/login', function () {
-        it('should get a valid token for user', function (done) {
+        it('should get a valid token for user.', function (done) {
             chai.request(app)
                 .post('/api/auth/login')
                 .send(regDetails)
@@ -68,7 +80,7 @@ describe('Questions', () => {
     
     //End point 1
     describe('POST Question /api/questions', () => {
-        it('it should create a question', (done) => {
+        it('should create a question.', (done) => {
             chai.request(app)
             .post('/api/questions')
             .set('x-access-token', accessToken)
@@ -83,7 +95,7 @@ describe('Questions', () => {
             });
         });
 
-        it('it should create a question with previously created tags', (done) => {
+        it('should create a question with previously created tags.', (done) => {
             chai.request(app)
             .post('/api/questions')
             .set('x-access-token', accessToken)
@@ -98,7 +110,7 @@ describe('Questions', () => {
             });
         });
 
-        it('it should not create a question without question', (done) => {
+        it('should not create a question without question.', (done) => {
             chai.request(app)
             .post('/api/questions')
             .set('x-access-token', accessToken)
@@ -111,7 +123,7 @@ describe('Questions', () => {
             });
         });
 
-        it('it should not create a question without tags', (done) => {
+        it('should not create a question without tags.', (done) => {
             chai.request(app)
             .post('/api/questions')
             .set('x-access-token', accessToken)
@@ -127,7 +139,7 @@ describe('Questions', () => {
 
     //End point 2
     describe('GET Question /api/questions', () => {
-        it('it should return error without tag parameter', (done) => {
+        it('should return error without tag parameter.', (done) => {
             chai.request(app)
             .get('/api/questions')
             .set('x-access-token', accessToken)
@@ -137,19 +149,7 @@ describe('Questions', () => {
             });
         });
 
-        /*it('it should not get question matching one of the tags', (done) => {
-            chai.request(app)
-            .get('/api/questions?tag=easy&tag=math')
-            .set('x-access-token', accessToken)
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.body.should.have.property('questions'); 
-                res.body.questions.length.should.be.eql(0);
-                done();
-            });
-        });*/
-
-        it('it should get all the questions matching all the tags', (done) => {
+        it('should get all the questions matching all the tags.', (done) => {
             chai.request(app)
             .get('/api/questions?tag=easy&tag=science&tag=physics')
             .set('x-access-token', accessToken)
@@ -165,7 +165,7 @@ describe('Questions', () => {
 
     //End point 3
     describe('POST Quiz /api/quiz', () => {
-        it('it should return error without questions parameter.', (done) => {
+        it('should return error without questions parameter.', (done) => {
             chai.request(app)
                 .post('/api/quiz')
                 .set('x-access-token', accessToken)
@@ -178,7 +178,7 @@ describe('Questions', () => {
                 });
         });
 
-        it('it should return error without length parameter.', (done) => {
+        it('should return error without length parameter.', (done) => {
             chai.request(app)
                 .post('/api/quiz')
                 .set('x-access-token', accessToken)
@@ -197,7 +197,7 @@ describe('Questions', () => {
                 });
         });
 
-        it('it should return error if length parameter bigger than length of questions parameter.', (done) => {
+        it('should return error if length parameter bigger than length of questions parameter.', (done) => {
             chai.request(app)
                 .post('/api/quiz')
                 .set('x-access-token', accessToken)
@@ -217,7 +217,7 @@ describe('Questions', () => {
                 });
         });
 
-        it('it should get random quiz result matching the length of the parameter.', (done) => {
+        it('should get random quiz result matching the length of the parameter.', (done) => {
             chai.request(app)
                 .post('/api/quiz')
                 .set('x-access-token', accessToken)
