@@ -12,10 +12,13 @@ git clone https://github.com/lewtw87/tech-assess-project
 npm install
 ```
 
+**Please configure you MySQL connection inside db.js before running the server.**
+
 To start the node.js server, run the following
 ```bash
 node server.js
 ```
+
 The application will be running at http://localhost:3030 .
 
 ## Testing the application before running
@@ -23,9 +26,9 @@ To test the application, run the following
 ```bash
 npm test
 ```
-x
 
-##Usage
+
+## Usage
 There are 5 endpoints in this application (3 from assessment specification, and 2 is added by me for security purpose):
 1. Alvin Added Endpoint 1: Create a user
 - End point: POST /api/auth/register
@@ -64,7 +67,7 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 ```
 
 3. Assessment Endpoint 1: Add a question
-* You must set header's "x-access-token" value with the token obtained via previous end point.
+**You must set header's "x-access-token" value with the token obtained via previous end point.**
 - End point: POST /api/questions
 - Request body: Specifies question text and tags of question to be added
 - Header:
@@ -88,7 +91,7 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 ```
 
 4. Assessment Endpoint 2: Find questions by tags
-* You must set header's "x-access-token" value with the token obtained via previous end point.
+**You must set header's "x-access-token" value with the token obtained via previous end point.**
 - End point: GET /api/questions
 - Request body: Specifies question text and tags of question to be added
 - Header:
@@ -118,7 +121,7 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 ```
 
 5. Assessment Endpoint 3: Make a random quiz
-* You must set header's "x-access-token" value with the token obtained via previous end point.
+**You must set header's "x-access-token" value with the token obtained via previous end point.**
 - End point: POST /api/quiz
 - Request body: Specifies list of question IDs in the pool, and their corresponding weights
 - Header:
@@ -147,4 +150,21 @@ There are 5 endpoints in this application (3 from assessment specification, and 
 ```
 
 
-##Explanation
+## Explanation
+1. I have added security token check for all 3 end point in the assessment. Before calling the 3 API, please register a user account using POST http://localhost:3030/api/auth/register by passing in request body of {email: *youemail@email.com*, *password: yourpassword*}. The response body will contains a token which will expire in 24 hours. When query the 3 API in the assessment, please set header by adding this token to "x-access-token". Please contact me if you have any question/issue using the API.
+2. This API is built using Node.js with ExpressJs framework. ORM is done using sequelize.
+3. Unit test is done using Mocha and Chai (unit test located in test/mochaTest.js).
+4. MySQL configuration is in db.js. "techassess_elearning" below is database name, "root" is username, 3rd param is the password which is empy.
+```
+const sequelize = new Sequelize('techassess_elearning', 'root', '', {
+    host: 'localhost',
+    dialect: 'mysql',
+    pool: {
+        max: 10,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+    },
+    operatorsAliases: { $and: Op.and, $in: Op.in }
+});
+```
