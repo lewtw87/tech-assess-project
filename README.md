@@ -23,21 +23,21 @@ To test the application, run the following
 ```bash
 npm test
 ```
-
+x
 
 ##Usage
 There are 5 endpoints in this application (3 from assessment specification, and 2 is added by me for security purpose):
-- Alvin Added Endpoint 1: Create a user
-End point: POST /api/auth/register
-Request body: Specifies email and password of the user
-Example (Request Body): 
+1. Alvin Added Endpoint 1: Create a user
+- End point: POST /api/auth/register
+- Request body: Specifies email and password of the user
+- Example (Request Body): 
 ```json
 {
 	"email": "lewtw87@gmail.com",
 	"password": "alvinlew"
 }
 ```
-Example (Respond Body): 
+- Example (Response Body): 
 ```json
 {
 	"auth":true,
@@ -45,17 +45,17 @@ Example (Respond Body):
 }
 ```
 
-- Alvin Added Endpoint 2: Login with existing user
-End point: POST /api/auth/login
-Request body: Specifies email and password of the user
-Example (Request Body): 
+2. Alvin Added Endpoint 2: Login with existing user
+- End point: POST /api/auth/login
+- Request body: Specifies email and password of the user
+- Example (Request Body): 
 ```json
 {
 	"email": "lewtw87@gmail.com",
 	"password": "alvinlew"
 }
 ```
-Example (Respond Body): 
+- Example (Response Body): 
 ```json
 {
 	"auth": true,
@@ -63,45 +63,45 @@ Example (Respond Body):
 }
 ```
 
-- Assessment Endpoint 1: Add a question
+3. Assessment Endpoint 1: Add a question
 * You must set header's "x-access-token" value with the token obtained via previous end point.
-End point: POST /api/questions
-Request body: Specifies question text and tags of question to be added
-Header:
+- End point: POST /api/questions
+- Request body: Specifies question text and tags of question to be added
+- Header:
 ```json
 {
 	"x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNTQyNTIyOTg4LCJleHAiOjE1NDI2MDkzODh9.JSMD6GFe7fGcQXoTkAivBpYmTZrHuJo-96G6ROPykNs"
 }
 ```
-Example (Request Body): 
+- Example (Request Body): 
 ```json
 {
 	"question": "What is the boiling point of water?",
 	"tags": ["science","physics","easy"]
 }
 ```
-Example (Respond Body): 
+- Example (Response Body): 
 ```json
 {
 	"id": 167
 }
 ```
 
-- Assessment Endpoint 2: Find questions by tags
+4. Assessment Endpoint 2: Find questions by tags
 * You must set header's "x-access-token" value with the token obtained via previous end point.
-End point: GET /api/questions
-Request body: Specifies question text and tags of question to be added
-Header:
+- End point: GET /api/questions
+- Request body: Specifies question text and tags of question to be added
+- Header:
 ```json
 {
 	"x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNTQyNTIyOTg4LCJleHAiOjE1NDI2MDkzODh9.JSMD6GFe7fGcQXoTkAivBpYmTZrHuJo-96G6ROPykNs"
 }
 ```
-Example (Request Param): 
+- Example (Request Param): 
 ```json
 ?tag=easy&tag=science
 ```
-Example (Respond Body): 
+- Example (Response Body): 
 ```json
 {
 	"questions": [
@@ -117,17 +117,17 @@ Example (Respond Body):
 }
 ```
 
-- Assessment Endpoint 3: Make a random quiz
+5. Assessment Endpoint 3: Make a random quiz
 * You must set header's "x-access-token" value with the token obtained via previous end point.
-End point: POST /api/quiz
-Request body: Specifies list of question IDs in the pool, and their corresponding weights
-Header:
+- End point: POST /api/quiz
+- Request body: Specifies list of question IDs in the pool, and their corresponding weights
+- Header:
 ```json
 {
 	"x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNTQyNTIyOTg4LCJleHAiOjE1NDI2MDkzODh9.JSMD6GFe7fGcQXoTkAivBpYmTZrHuJo-96G6ROPykNs"
 }
 ```
-Example (Request Body): 
+- Example (Request Body): 
 ```json
 {
 	"questions": [
@@ -139,7 +139,7 @@ Example (Request Body):
 	"length": 3
 }
 ```
-Example (Respond Body): 
+- Example (Response Body): 
 ```json
 {
 	"questions": [2, 3, 4]
