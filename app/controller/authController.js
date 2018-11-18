@@ -26,7 +26,10 @@ exports.login = function (req, res) {
 
         // return the information including token as JSON
         res.json({ auth: true, token: token });
-    }).catch(err => res.status(400).json({ error: true, message: err}));
+    }).catch(function(err) {
+        console.log(err);
+        res.status(400).json({ error: true, message: err.errors});
+    });
     
     
 };
@@ -36,7 +39,6 @@ exports.register = function (req, res) {
     var hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
     db.Users.create({
-        name : req.body.name,
         email : req.body.email,
         password : hashedPassword
     }).then(user => {
@@ -49,12 +51,11 @@ exports.register = function (req, res) {
         });
 
         res.json({ auth: true, token: token });
-    }).catch(err => res.status(400).json({ error: true, message: err}));
+    }).catch(function(err) {
+        console.log(err);
+        res.status(400).json({ error: true, message: err.errors});
+    });
     
 };
 
-
-exports.logout = function (req, res) {
-    res.json({ auth: false, token: null });  
-};
 

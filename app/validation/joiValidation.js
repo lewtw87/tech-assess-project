@@ -13,7 +13,7 @@ const get_question_by_tag = {
         return {
           message: "Please specify one or more tag."
         };
-      }), 
+      }) 
     }
   
 };

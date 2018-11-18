@@ -10,7 +10,10 @@ exports.create_question = function (req, res) {
     db.Questions.create(req.body)
     .then(questions => Promise.all(tags).then(storedTags => questions.addTags(storedTags)).then(() => questions))
     .then(questionTag => res.status(201).json(questionTag)) //return 201 for POST succeed status
-    .catch(err => res.status(400).json({ error: true, message: err}));
+    .catch(function(err) {
+        console.log(err);
+        res.status(400).json({ error: true, message: "There is a problem querying the database."});
+    });
     
 };
 
@@ -36,8 +39,6 @@ exports.get_question_by_tag = function (req, res) {
         res.status(400).json({ error: true, message: "There is a problem querying the database."});
     });*/
     
-    //TODO, currently this query retrieve all records that matching any of the tags, need to filter to records matching ALL the tags
-
     let tagArrayString = "";
     let tagCount = 0;
     if(Array.isArray(req.query.tag)) 
@@ -57,7 +58,7 @@ exports.get_question_by_tag = function (req, res) {
         GROUP BY q.id
         HAVING COUNT(DISTINCT t.tag) >= ` + tagCount + `
     `, { type: db.sequelize.QueryTypes.SELECT}).then(x => {
-        res.json(x);
+        res.json({questions: x});
     }).catch(function(err) {
         console.log(err);
         res.status(400).json({ error: true, message: "There is a problem querying the database."});
@@ -67,69 +68,59 @@ exports.get_question_by_tag = function (req, res) {
 
 //Gov Tech Endpoint 3
 exports.create_quiz = function (req, res) {
-    //Check if length must be less than number of quiz in the DB
-    db.Questions.count().then(n => {
-        if(req.body.length > n)   
-        {
-            res.status(400).json({ error: true, message: "Request length exceed the number of questions in the database."});
-        } 
-        else
-        {
-            let sumOfWeights = req.body.questions.reduce(function(memo, question) {
-                return memo + question.weight;
-              }, 0);
-            let selectedWeigths = {};
-            let selectedId = [];
-            const probabilityOfDistribution = sumOfWeights * 20; //Alvin: Higher for more accuracy and less variation
+    if(req.body.length > req.body.questions.length)   
+    {
+        //Check if length must be less than number of questions in the req "where m <= n"
+        res.status(400).json({ error: true, message: "Requested length exceed the number of questions."});
+    } 
+    else
+    {
+        let sumOfWeights = req.body.questions.reduce(function(memo, question) {
+            return memo + question.weight;
+            }, 0);
+        let selectedWeigths = {};
+        let selectedId = [];
+        const probabilityOfDistribution = sumOfWeights * 20; //Alvin: Higher for more accuracy and less variation
 
+        for (var key in req.body.questions) {
+            const question = req.body.questions[key];
+            selectedWeigths[question.id] = 0;
+        }
+
+        for (var i = 0; i < probabilityOfDistribution; i++) {
+            let random = Math.random() * (sumOfWeights + 1);
             for (var key in req.body.questions) {
                 const question = req.body.questions[key];
-                selectedWeigths[question.id] = 0;
+                //console.log(question);
+                random -= question.weight;
+                if(random <= 0)
+                {
+                    selectedWeigths[question.id] = (selectedWeigths[question.id] || 0) + 1;
+                    break;
+                }
             }
+        }  
 
-            for (var i = 0; i < probabilityOfDistribution; i++) {
-                let random = Math.random() * (sumOfWeights + 1);
-                for (var key in req.body.questions) {
-                    const question = req.body.questions[key];
-                    //console.log(question);
-                    random -= question.weight;
-                    if(random <= 0)
-                    {
-                        selectedWeigths[question.id] = (selectedWeigths[question.id] || 0) + 1;
-                        break;
-                    }
-                }
-            }  
+        var sortedWeights = Object.keys(selectedWeigths).map(function(key) {
+            return [key, selectedWeigths[key]];
+        });
+        
+        
+        // Sort the array based on the second element
+        sortedWeights.sort(function(first, second) {
+            return second[1] - first[1];
+        });
 
-            var sortedWeights = Object.keys(selectedWeigths).map(function(key) {
-                return [key, selectedWeigths[key]];
-            });
-            
-            
-            // Sort the array based on the second element
-            sortedWeights.sort(function(first, second) {
-                return second[1] - first[1];
-            });
+        console.log(sortedWeights); // ALV: first is id, 2nd is distributed probability (% of occurence)
 
-            console.log(sortedWeights); // ALV: first is id, 2nd is distributed probability (% of occurence)
+        for (var i = 0; i < req.body.length; i++) { // now lets iterate in sort order
+            var key = parseInt(sortedWeights[i][0]);
+            selectedId.push(key);
+        } 
 
-            for (var i = 0; i < req.body.length; i++) { // now lets iterate in sort order
-                var key = parseInt(sortedWeights[i][0]);
-                selectedId.push(key);
-            } 
-
-            /*db.Questions.findAll(
-                { 
-                    limit: req.body.length, 
-                    where: {
-                        id: selectedId
-                    },
-                    attributes: ['id', 'question']
-                }
-            ).then(questions => res.json(questions));*/
-            res.json({ questions: selectedId });
-        }
-    });
+        res.json({ questions: selectedId });
+    }
+    
 
 };
 

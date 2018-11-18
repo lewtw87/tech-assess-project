@@ -10,7 +10,7 @@ module.exports = function (app) {
     const validate = require('express-validation');
     const validation = require('../validation/joiValidation.js');
 
-  
+    
 
     // Welcome
     app.get('/', function (req, res) {
@@ -25,12 +25,17 @@ module.exports = function (app) {
         res.status(200).send('API works.');
     });
 
+    app.use((err, req, res, next) => {
+        if (err instanceof SyntaxError) return res.status(400).send(JSON.stringify({
+            error: true, message: "The body of your request is not valid json."
+        }))
+    
+        res.status(500).send();
+    });
+
     // For authentication purpose
     app.post('/api/auth/login', function(req, res) {
         authController.login(req, res);
-    });
-    app.post('/api/auth/logout', function(req, res) {
-        authController.logout(req, res);
     });
     app.post('/api/auth/register', function(req, res) {
         authController.register(req, res);
