@@ -9,7 +9,7 @@ exports.create_question = function (req, res) {
 
     db.Questions.create(req.body)
     .then(questions => Promise.all(tags).then(storedTags => questions.addTags(storedTags)).then(() => questions))
-    .then(questionTag => res.status(201).json(questionTag)) //return 201 for POST succeed status
+    .then(questionTag => res.status(201).json({id: questionTag.id })) //return 201 for POST succeed status
     .catch(function(err) {
         console.log(err);
         res.status(400).json({ error: true, message: "There is a problem querying the database."});
